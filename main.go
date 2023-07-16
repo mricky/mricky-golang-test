@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"mricky-golang-test/profile"
-	"mricky-golang-test/skill"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -22,6 +21,20 @@ func main(){
     fmt.Println("Connection to db is succesfully connected")
 
 	 // scope test repository
+	 // User
+	//  userStruct := user.User{
+	// 		Name: "Mohammad Ricky",
+	// 		Email: "mricky.it@gmail.com",
+	// 		Username: "mricky",
+	// 		Password: "rahasia",
+	// 		ProfileId: 1,
+	//  }
+
+	//  userRepository := user.ImplUserRepository(db)
+	//  _,err = userRepository.Save(userStruct)
+	//  if(err != nil){
+	// 	fmt.Println("Berhasil Insert User")
+	//  }
 	 // Profile
 	 profileRepository := profile.ImplProfileRepository(db)
 	 data, err := profileRepository.FindAll()
@@ -30,11 +43,4 @@ func main(){
 	 fmt.Println(data)
 	 fmt.Println(data1)
 
-	 // Skill
-	 skillRepository := skill.ImplSkillRepository(db)
-	 skills, err := skillRepository.FindAll()
-	 skill, err := skillRepository.FindByID(1)
-
-	 fmt.Println(skills)
-	 fmt.Println(skill)
 }
