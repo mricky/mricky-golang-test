@@ -2,7 +2,10 @@ package test
 
 import (
 	"fmt"
+	"mricky-golang-test/activity"
+	"mricky-golang-test/profile"
 	"mricky-golang-test/skill"
+	"mricky-golang-test/user"
 	"testing"
 
 	"gorm.io/driver/mysql"
@@ -17,6 +20,27 @@ func setupTestDB() *gorm.DB {
 	return db
 }
 
+func TestProfileFindAll(t *testing.T){
+	db := setupTestDB()
+	profileRepository := profile.ImplProfileRepository(db)
+	profiles, err := profileRepository.FindAll()
+
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(profiles)
+}
+func TestProfileFindByID(t *testing.T){
+	db := setupTestDB()
+	profileRepository := profile.ImplProfileRepository(db)
+	profile, err := profileRepository.FindByID(1)
+
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(profile)
+} 
 func TestSkillFindAll(t *testing.T){
 	// next test with handler
 	db := setupTestDB()
@@ -40,3 +64,100 @@ func TestSkillFindByID(t *testing.T){
 
 	fmt.Println(skill)
 } 
+
+func TestUserCreate(t *testing.T){
+	 db := setupTestDB()
+	 
+	 userStruct := user.User{
+			Name: "Mohammad Ricky",
+			Email: "mricky.it@gmail.com",
+			Username: "mricky",
+			Password: "rahasia",
+			ProfileId: 1,
+	 }
+	
+	 userRepository := user.ImplUserRepository(db)
+	 
+	 _,err := userRepository.Save(userStruct)
+	
+	 if(err != nil){
+		fmt.Println("Berhasil Insert User")
+	 }
+}
+
+func TestUserFindAll(t *testing.T){
+	// next test with handler
+	db := setupTestDB()
+	userRepository := user.ImplUserRepository(db)
+	users, err := userRepository.FindAll()
+
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(users)
+}
+
+func TestSkillFindByEmail(t *testing.T){
+	db := setupTestDB()
+	userRepository := user.ImplUserRepository(db)
+	user, err := userRepository.FindByEmail("mricky.it@gmail.com")
+
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(user)
+} 
+
+func TestActivitySave(t *testing.T){
+	db := setupTestDB()	 
+	activityRepository := activity.ImplActivityRepository(db)
+
+	activity := activity.Activity{
+		SkillId: 1,
+		UserId: 1,
+		Title: "Bootcame Golang",
+		StartDate: "2023-06-25",
+		EndDate: "2020-06-30",
+	}
+
+	_,err := activityRepository.Save(activity)
+	
+	 if(err != nil){
+		fmt.Println("Berhasil Insert Activity")
+	 }
+}
+
+func TestActivityUpdate(t *testing.T){
+	db := setupTestDB()	 
+	activityRepository := activity.ImplActivityRepository(db)
+
+	activity := activity.Activity{
+		Id: 2,
+		SkillId: 1,
+		UserId: 1,
+		Title: "Bootcame Golang ddd ddd s",
+		StartDate: "2023-06-25",
+		EndDate: "2020-06-27",
+	}
+
+	_,err := activityRepository.Update(activity)
+	
+	 if(err != nil){
+		fmt.Println("Berhasil Insert Activity")
+	 }
+}
+
+func TestActivityFindAll(t *testing.T){
+	// next test with handler
+	db := setupTestDB()
+	activityRepository := activity.ImplActivityRepository(db)
+	
+	// Test Service
+	activityService := activity.ImplActivityService(activityRepository)
+	activities,err := activityService.GetActivities()
+
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(activities)
+}

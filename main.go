@@ -1,10 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"mricky-golang-test/profile"
+	"mricky-golang-test/activity"
+	"mricky-golang-test/handler"
 
+	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -18,29 +19,15 @@ func main(){
     	log.Fatal(err.Error())
     }
 
-    fmt.Println("Connection to db is succesfully connected")
+	activityRepository := activity.ImplActivityRepository(db)
+    activityService := activity.ImplActivityService(activityRepository)
+    activityHandler := handler.ImplActivityHandler(activityService)
+	
+	router := gin.Default()
+	api := router.Group("/v1")
 
-	 // scope test repository
-	 // User
-	//  userStruct := user.User{
-	// 		Name: "Mohammad Ricky",
-	// 		Email: "mricky.it@gmail.com",
-	// 		Username: "mricky",
-	// 		Password: "rahasia",
-	// 		ProfileId: 1,
-	//  }
+	api.GET("/activities",activityHandler.GetActivities)
 
-	//  userRepository := user.ImplUserRepository(db)
-	//  _,err = userRepository.Save(userStruct)
-	//  if(err != nil){
-	// 	fmt.Println("Berhasil Insert User")
-	//  }
-	 // Profile
-	 profileRepository := profile.ImplProfileRepository(db)
-	 data, err := profileRepository.FindAll()
-	 data1, err := profileRepository.FindByID(1)
-
-	 fmt.Println(data)
-	 fmt.Println(data1)
-
+	router.Run()
+	// next bikin login dan menggunakan middleware
 }

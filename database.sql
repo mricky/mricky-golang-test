@@ -30,6 +30,7 @@ CREATE TABLE users (
 CREATE TABLE activities (
      id INT NOT NULL AUTO_INCREMENT,
      skill_id int NOT NULL, 
+     user_id int NOT NULL, 
      title VARCHAR(100),
      start_date DATE,
      end_date DATE,
@@ -38,21 +39,9 @@ CREATE TABLE activities (
      PRIMARY KEY (id),
      FOREIGN KEY (skill_id) REFERENCES skills(id) 
     		ON UPDATE CASCADE
+    		ON DELETE CASCADE,
+     FOREIGN KEY (user_id) REFERENCES users(id) 
+    		ON UPDATE CASCADE
     		ON DELETE CASCADE
 );
 
-CREATE TABLE participants
-(
-    id INT NOT NULL AUTO_INCREMENT,
-    user_id INT NOT NULL,
-    activity_id INT NOT NULL,
-    created_at DATETIME,
-    updated_at DATETIME,
-    PRIMARY KEY (id),
-    FOREIGN KEY (user_id) REFERENCES users(id) 
-                ON UPDATE CASCADE
-                ON DELETE CASCADE,
-    FOREIGN KEY (activity_id) REFERENCES activities(id) 
-                ON UPDATE CASCADE
-                ON DELETE CASCADE
-)
