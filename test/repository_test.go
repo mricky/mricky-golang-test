@@ -86,26 +86,34 @@ func TestUserCreate(t *testing.T){
 	 }
 }
 
-func TestUserFindAll(t *testing.T){
-	// next test with handler
-	db := setupTestDB()
-	userRepository := user.ImplUserRepository(db)
-	users, err := userRepository.FindAll()
+// func TestUserFindAll(t *testing.T){
+// 	// next test with handler
+// 	db := setupTestDB()
+// 	userRepository := user.ImplUserRepository(db)
+// 	users, err := userRepository.FindAll()
 
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(users)
-}
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	fmt.Println(users)
+// }
 
 func TestSkillFindByEmail(t *testing.T){
 	db := setupTestDB()
 	userRepository := user.ImplUserRepository(db)
-	user, err := userRepository.FindByEmail("mricky.it@gmail.com")
+	userService := user.ImplUserService(userRepository)
+
+	input := user.LoginInput{
+		Email: "mricky.it@gmail.com",
+		Password: "password",
+		
+	}
+	user, err := userService.Login(input)
 
 	if err != nil {
 		panic(err)
 	}
+	
 	fmt.Println(user)
 } 
 

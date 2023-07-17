@@ -38,6 +38,8 @@ func main(){
 	api := router.Group("/v1")
 
 	api.POST("/users",userHandler.RegisterUser)
+	api.POST("auth/login",userHandler.Login)
+	
 	api.GET("/activities",activityHandler.GetActivities)
 
 	// SKILL

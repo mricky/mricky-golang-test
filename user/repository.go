@@ -4,9 +4,7 @@ import "gorm.io/gorm"
 
 type UserRepository interface {
 	Save(user User) (User, error)
-	//FindAll()([]User, error)
-	//FindByEmail(email string) ([]User, error)
-	//FindByProfileID(profileID int) ([]User, error)
+	FindByEmail(email string) (User, error)
 }
 
 type reporsitory struct {
@@ -38,15 +36,15 @@ func (r *reporsitory) Save(user User) (User, error) {
 // 	return users, nil
 // }
 
-// func (r *reporsitory) FindByEmail(email string) ([]User, error){
-// 	var users []User
-// 	err := r.db.Where("email = ?", email).Find(&users).Error
+func (r *reporsitory) FindByEmail(email string) (User, error){
+	var user User
+	err := r.db.Where("email = ?", email).Find(&user).Error
 
-// 	if err != nil {
-// 		return users, nil
-// 	} 
-// 	return users, nil
-// }
+	if err != nil {
+		return user, nil
+	} 
+	return user, nil
+}
 
 // func (r *reporsitory) FindByProfileID(profileID string) ([]User, error){
 // 	var users []User
