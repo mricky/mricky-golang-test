@@ -9,6 +9,7 @@ import (
 type UserService interface {
 	RegisterUser(input RegisterUserInput)(User, error)
 	Login(input LoginInput)(User, error)
+	GetUserByID(userId int) (User, error)
 
 }
 
@@ -63,5 +64,15 @@ func (s *service) Login(input LoginInput) (User, error) {
 		return user,err
 	}
 
+	return user, nil
+}
+
+func (s *service) GetUserByID(userId int) (User, error){
+	
+	user, err := s.reporsitory.FindByID(userId)
+
+	if err != nil {
+		return user, err
+	}
 	return user, nil
 }

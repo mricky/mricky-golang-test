@@ -6,9 +6,13 @@ import (
 	"mricky-golang-test/activity"
 	"mricky-golang-test/auth"
 	"mricky-golang-test/handler"
+	"mricky-golang-test/helper"
 	"mricky-golang-test/skill"
 	"mricky-golang-test/user"
+	"net/http"
+	"strings"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -45,14 +49,54 @@ func main(){
 	router := gin.Default()
 	api := router.Group("/v1")
 
-	api.POST("/users",userHandler.RegisterUser)
+	api.POST("/users",authMiddleware(authService, userService),userHandler.RegisterUser)
 	api.POST("auth/login",userHandler.Login)
 
-	api.GET("/activities",activityHandler.GetActivities)
+	api.GET("/activities",authMiddleware(authService, userService),activityHandler.GetActivities)
 
 	// SKILL
-	api.GET("/skills",skillHandler.GetSkills)
+	api.GET("/skills",authMiddleware(authService, userService),skillHandler.GetSkills)
 	
 	router.Run()
-	// next bikin login dan menggunakan middleware
+	
+}
+
+func authMiddleware(authService auth.Service, userService user.UserService) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		inputToken := c.Query("token")
+
+		if len(strings.TrimSpace(inputToken)) == 0 { 
+			response := helper.APIResponse("Unauthorize",http.StatusUnauthorized,"error", nil)
+			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+			return
+		} 
+
+		token, err := authService.ValidateToken(inputToken)
+
+		if err != nil {
+			response := helper.APIResponse("Unauthorize",http.StatusUnauthorized,"error", nil)
+			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+			return
+		}
+
+		claim, ok := token.Claims.(jwt.MapClaims)
+
+		if !ok || !token.Valid {
+			response := helper.APIResponse("Unauthorize",http.StatusUnauthorized,"error", nil)
+			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+			return
+		}
+		
+		userID := int(claim["user_id"].(float64))
+
+		user, err := userService.GetUserByID(userID)
+
+		if err != nil{
+			response := helper.APIResponse("Unauthorize",http.StatusUnauthorized,"error", nil)
+			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+			return
+		}
+
+		c.Set("currentUser",user)
+	}
 }
