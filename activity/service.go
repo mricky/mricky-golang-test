@@ -1,7 +1,9 @@
 package activity
 
-type ActivityService interface{
+import "fmt"
 
+type ActivityService interface{
+	Create(input CreateActivityInput) (Activity,error)
 	GetActivities()([]Activity, error)
 }
 
@@ -21,4 +23,22 @@ func (s *service)GetActivities()([]Activity, error){
 	}
 
 	return activities, nil
+}
+
+func (s *service) Create(input CreateActivityInput)(Activity, error) {
+	activity := Activity{}
+	activity.SkillId = input.SkillId
+	activity.UserId = input.UserId
+	activity.StartDate = input.StartDate
+	activity.EndDate = input.EndDate
+	activity.Title = input.Title
+
+	fmt.Println(activity)
+	newActivity, err:= s.reporsitory.Save(activity)
+
+	if err != nil {
+		return newActivity, err
+	}
+
+	return newActivity, nil
 }

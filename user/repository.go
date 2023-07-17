@@ -25,17 +25,6 @@ func (r *reporsitory) Save(user User) (User, error) {
 
 	return user, nil
 }
-// func (r *reporsitory) FindAll() ([]User, error) {
-// 	var users []User
-
-// 	err := r.db.Find(&users).Error
-
-// 	if err != nil {
-// 		return users, err
-// 	}
-
-// 	return users, nil
-// }
 
 func (r *reporsitory) FindByEmail(email string) (User, error){
 	var user User
@@ -56,12 +45,3 @@ func (r *reporsitory) FindByID(userId int) (User, error){
 	} 
 	return user, nil
 }
-// func (r *reporsitory) FindByProfileID(profileID string) ([]User, error){
-// 	var users []User
-// 	err := r.db.Where("profile_id = ?", profileID).Find(&users).Error
-
-// 	if err != nil {
-// 		return users, nil
-// 	} 
-// 	return users, nil
-// }

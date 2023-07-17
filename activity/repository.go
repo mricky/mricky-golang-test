@@ -26,6 +26,7 @@ func (r *reporsitory) Save(activity Activity) (Activity, error) {
 	return activity, nil
 }
 
+
 func (r *reporsitory) Update(activity Activity) (Activity, error) {
 	err := r.db.Save(&activity).Error
 

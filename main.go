@@ -52,8 +52,9 @@ func main(){
 	api.POST("/users",authMiddleware(authService, userService),userHandler.RegisterUser)
 	api.POST("auth/login",userHandler.Login)
 
+	api.POST("/activities",authMiddleware(authService, userService),activityHandler.SaveActivity)
 	api.GET("/activities",authMiddleware(authService, userService),activityHandler.GetActivities)
-
+	
 	// SKILL
 	api.GET("/skills",authMiddleware(authService, userService),skillHandler.GetSkills)
 	
