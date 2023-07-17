@@ -13,6 +13,10 @@ go get -u gorm.io/driver/mysql
 
 go get github.com/go-playground/validator/v10
 
+## JWT
+
+go get github.com/dgrijalva/jwt-go
+
 # Analisis Data
 
 profiles

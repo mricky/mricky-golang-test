@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"mricky-golang-test/auth"
 	"mricky-golang-test/helper"
 	"mricky-golang-test/user"
 	"net/http"
@@ -10,11 +11,12 @@ import (
 
 type userHandler struct {
 	service user.UserService
+	authService auth.Service
 }
 
 
-func ImplUserHandler(service user.UserService) *userHandler {
-	return &userHandler{service }
+func ImplUserHandler(service user.UserService,authService auth.Service) *userHandler {
+	return &userHandler{service,authService }
 }
 
 func (h *userHandler) RegisterUser(c *gin.Context){
@@ -37,11 +39,19 @@ func (h *userHandler) RegisterUser(c *gin.Context){
 	
 	if err != nil {
 		response := helper.APIResponse("Register account failed",http.StatusBadRequest,"error",nil)
-		c.JSON(http.StatusOK, response)
+		c.JSON(http.StatusBadRequest, response)
 		return
 	}
 	
-	formater := user.FormaterUser(newUser,"jwtoken")
+	token, err := h.authService.GenerateToken(newUser.Id)
+
+	if err != nil {
+		response := helper.APIResponse("Register account failed",http.StatusBadRequest,"error",nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	formater := user.FormaterUser(newUser,token)
 	response := helper.APIResponse("Account has been registered",http.StatusOK,"success",formater)
 	
 	c.JSON(http.StatusOK, response)
@@ -72,7 +82,15 @@ func (h *userHandler) Login(c *gin.Context){
 	}
 
 	// using formater
-	formatter := user.FormaterUser(loggedinUser,"tokentoken")
+	newToken, err := h.authService.GenerateToken(loggedinUser.Id)
+
+	if err != nil {
+		response := helper.APIResponse("Login  failed",http.StatusBadRequest,"error",nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+	
+	formatter := user.FormaterUser(loggedinUser,newToken)
 	response := helper.APIResponse("Succesfully logged in",http.StatusOK,"success",formatter)
 
 	c.JSON(http.StatusOK, response)

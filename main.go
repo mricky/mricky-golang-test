@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"mricky-golang-test/activity"
+	"mricky-golang-test/auth"
 	"mricky-golang-test/handler"
 	"mricky-golang-test/skill"
 	"mricky-golang-test/user"
@@ -23,8 +25,10 @@ func main(){
 
 	userRepository := user.ImplUserRepository(db)
 	userService := user.ImplUserService(userRepository)
-	userHandler := handler.ImplUserHandler(userService)
-
+	authService := auth.ImplService()
+	userHandler := handler.ImplUserHandler(userService,authService)
+	
+	
 	activityRepository := activity.ImplActivityRepository(db)
     activityService := activity.ImplActivityService(activityRepository)
     activityHandler := handler.ImplActivityHandler(activityService)
@@ -33,13 +37,17 @@ func main(){
 	skillService := skill.ImplSkillService(skillRepository)
 	skillHandler := handler.ImplSkillHandler(skillService)
 	
+
+	// test jwt
+	
+	fmt.Println(authService.GenerateToken(1))
 	
 	router := gin.Default()
 	api := router.Group("/v1")
 
 	api.POST("/users",userHandler.RegisterUser)
 	api.POST("auth/login",userHandler.Login)
-	
+
 	api.GET("/activities",activityHandler.GetActivities)
 
 	// SKILL

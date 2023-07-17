@@ -3,6 +3,7 @@ package test
 import (
 	"fmt"
 	"mricky-golang-test/activity"
+	"mricky-golang-test/auth"
 	"mricky-golang-test/profile"
 	"mricky-golang-test/skill"
 	"mricky-golang-test/user"
@@ -66,6 +67,19 @@ func TestSkillFindByID(t *testing.T){
 	fmt.Println(skill)
 } 
 
+func TestGenerateToken(t *testing.T){
+	authService := auth.ImplService()
+
+	
+	token, err := authService.GenerateToken(1)
+
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(token)
+} 
+
 func TestUserCreate(t *testing.T){
 	 db := setupTestDB()
 	 
@@ -98,6 +112,7 @@ func TestUserCreate(t *testing.T){
 // 	fmt.Println(users)
 // }
 
+
 func TestSkillFindByEmail(t *testing.T){
 	db := setupTestDB()
 	userRepository := user.ImplUserRepository(db)
@@ -113,7 +128,7 @@ func TestSkillFindByEmail(t *testing.T){
 	if err != nil {
 		panic(err)
 	}
-	
+
 	fmt.Println(user)
 } 
 
