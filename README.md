@@ -30,18 +30,12 @@ curl --location --request POST 'localhost:8080/v1/users' \
 - Get Skill
   curl --location --request GET 'localhost:8080/v1/skills?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyfQ.sAqFOr_3hLrMXrs5oLMtJHqdN_quozlTHAfJegeg02k' \
    --header 'Content-Type: application/json' \
-   --data-raw '{
-  "email" : "mricky.it@gmail.com",
-  "password": "password"
-  }'
+   --data-raw ''
 
 - Get Activitis
   curl --location --request GET 'localhost:8080/v1/activities?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyfQ.sAqFOr_3hLrMXrs5oLMtJHqdN_quozlTHAfJegeg02k' \
    --header 'Content-Type: application/json' \
-   --data-raw '{
-  "email" : "mricky.it@gmail.com",
-  "password": "password"
-  }'
+   --data-raw ''
 
 - Save Activities
   curl --location --request POST 'localhost:8080/v1/activities?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyfQ.sAqFOr_3hLrMXrs5oLMtJHqdN_quozlTHAfJegeg02k' \
