@@ -80,9 +80,9 @@ Pagination
 
 ## Steps
 
-1. Create Repository and Test
-2. Create Service and Test
-3. Handler Request
-4. Helper and Formater
+1. Create Repository and Test x
+2. Create Service and Test x
+3. Handler Request x
+4. Helper and Formater x
 5. Test In Posman
 6. Unitesting Repostory, Service, Handler

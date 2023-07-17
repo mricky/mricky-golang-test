@@ -42,10 +42,11 @@ func TestProfileFindByID(t *testing.T){
 	fmt.Println(profile)
 } 
 func TestSkillFindAll(t *testing.T){
-	// next test with handler
 	db := setupTestDB()
 	skillRepository := skill.ImplSkillRepository(db)
-	skills, err := skillRepository.FindAll()
+	
+	skillService := skill.ImplSkillService(skillRepository)
+	skills,err := skillService.GetSkills()
 
 	if err != nil {
 		panic(err)
